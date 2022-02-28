@@ -2,10 +2,6 @@ from sys import (exit as sys_exit, argv as sys_argv)
 from configparser import ConfigParser as configparser_ConfigParser
 from os.path import (exists as os_path_exists, split as os_path_split, isfile as os_path_isfile, isdir as os_path_isdir)
 from os import listdir as os_listdir
-# from PySide6.QtCore import QRegularExpression, Signal, Slot, QThread
-# from PySide6.QtGui import QRegularExpressionValidator
-# from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QLineEdit, QListView, QAbstractItemView, \
-#     QTreeView, QWidget, QVBoxLayout
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QRegularExpression, pyqtSignal as Signal, QThread
 from PyQt5.QtGui import QRegularExpressionValidator
