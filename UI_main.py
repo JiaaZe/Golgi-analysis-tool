@@ -629,6 +629,7 @@ class MainWindow(QMainWindow):
         self.beads_maps.figure.savefig(save_path)
 
 
+# Main access
 if __name__ == '__main__':
     app = QApplication(sys_argv)
     window = MainWindow()
