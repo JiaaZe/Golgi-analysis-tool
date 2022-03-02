@@ -122,9 +122,9 @@ class MainWindow(QMainWindow):
         self.ui.tabWidget.setCurrentIndex(0)
         self.ui.tabWidget.setTabEnabled(1, False)
         # TAB 1
-        error_browser_height = 40
-        self.ui.error_browser.setFixedHeight(error_browser_height)
-        self.ui.err_frame.setFixedHeight(error_browser_height + 10)
+        # error_browser_height = 40
+        # self.ui.error_browser.setFixedHeight(error_browser_height)
+        # self.ui.err_frame.setFixedHeight(error_browser_height + 10)
         self.ui.line_1.setVisible(False)
         self.ui.param_bg_algorithmn.setVisible(False)
 
@@ -466,8 +466,7 @@ class MainWindow(QMainWindow):
             n_enter = err_msg.count("\n")
             self.ui.next_btn.setDisabled(True)
             self.ui.error_browser.setVisible(True)
-            self.ui.error_browser.setText(err_msg[:-1])
-            print(n_enter)
+            self.ui.error_browser.setText(err_msg)
             if n_enter > 1:
                 error_browser_height = 20 * n_enter + 2
             else:
@@ -481,8 +480,8 @@ class MainWindow(QMainWindow):
             self.ui.error_browser.setVisible(True)
             self.ui.error_browser.setText("PASS")
             error_browser_height = 30
-        self.ui.error_browser.setFixedHeight(error_browser_height)
-        self.ui.err_frame.setFixedHeight(error_browser_height + 10)
+        # self.ui.error_browser.setFixedHeight(error_browser_height)
+        # self.ui.err_frame.setFixedHeight(error_browser_height + 10)
 
     def next_btn_handler(self):
         self.ui.tabWidget.setCurrentIndex(1)
