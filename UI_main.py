@@ -645,9 +645,14 @@ class MainWindow(QMainWindow):
         self.ui.scroll_beads_content.show()
 
     def save_beads_maps(self):
-        save_path, save_type = QFileDialog.getSaveFileName(self, "Save File", "./beads vector maps.pdf",
-                                                           'png (*.png);; pdf (*.pdf);;jpg (*.jpg)')
-        self.beads_maps.figure.savefig(save_path)
+        save_path, save_type = QFileDialog.getSaveFileName(self, "Save File", "./beads vector maps",
+                                                           'pdf (*.pdf);; png (*.png);;jpg (*.jpg)')
+        print(save_path)
+        if save_type == "pdf (*.pdf)":
+            with PdfPages(save_path) as pdf:
+                pdf.savefig(self.beads_maps.figure, dpi=120)
+        else:
+            self.beads_maps.figure.savefig(save_path)
 
 
 # Main access
