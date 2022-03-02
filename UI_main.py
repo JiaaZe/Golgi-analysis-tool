@@ -1,3 +1,4 @@
+import time
 from sys import (exit as sys_exit, argv as sys_argv)
 from configparser import ConfigParser as configparser_ConfigParser
 from os.path import (exists as os_path_exists, split as os_path_split, isfile as os_path_isfile, isdir as os_path_isdir)
@@ -18,6 +19,7 @@ from lq_dialog import LqDialog
 from utils import golgi_lq_2pdf
 from ui.mainUI3 import Ui_MainWindow
 from functions_for_qt import QtFunctions
+import logging
 
 GOLGI_DEFAULT = 0.4
 PIXEL_DEFAULT = 0.05
@@ -25,6 +27,33 @@ MAX_CON_AREA_DEFAULT = 10000
 R2_R1_DEFAULT = 5000
 
 config_file = "config.ini"
+
+
+def get_logger():
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+
+    datetime = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
+    log_path = './Logs/'
+    log_name = log_path + datetime + '.log'
+    logfile = log_name
+    if not os_path_exists(log_path):
+        os_mkdir(log_path)
+
+    handler = logging.FileHandler(logfile, mode='w')
+    handler.setLevel(logging.INFO)
+
+    formatter = logging.Formatter("%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s")
+    handler.setFormatter(formatter)
+
+    console_logger = logging.StreamHandler()
+    console_logger.setLevel(logging.INFO)
+    console_logger.setFormatter(formatter)
+
+    logger.addHandler(console_logger)
+    logger.addHandler(handler)
+
+    return logger
 
 
 def open_file_dialog(lineEdit: QLineEdit, mode=1, filetype="", folder=""):
@@ -74,7 +103,7 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-
+        self.logger = get_logger()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.resize(1141, 800)
@@ -511,10 +540,10 @@ class MainWindow(QMainWindow):
         self.ui.scroll_beads_content = QtWidgets.QWidget()
         self.ui.scroll_beads.setWidget(self.ui.scroll_beads_content)
 
-        print("start")
+        self.logger.info("start")
         try:
-            print('start doing stuff in:', QThread.currentThread())
-            self.func = QtFunctions(self.saved_model_path, self.saved_model)
+            self.logger.info('start doing stuff in: {}'.format(QThread.currentThread()))
+            self.func = QtFunctions(self.saved_model_path, self.saved_model, self.logger)
             self.func.moveToThread(self.thread)
             self.start_backgroung_work.connect(self.func.pipeline)
             self.func.append_text.connect(self.update_message)
@@ -543,17 +572,14 @@ class MainWindow(QMainWindow):
 
     def save_golgi_result(self):
         valid_golgi, valid_lq = self.func.get_golgi_lq()
-        print("save_golgi_result: ", valid_lq[0])
         if self.ui.pick_btn.isChecked():
             # pick_select
             selected_golgi = valid_golgi[self.selected_list]
             selected_lq = valid_lq[self.selected_list]
-            print(selected_golgi.shape, selected_lq.shape)
         else:
             # drop_select
             selected_golgi = np_delete(valid_golgi, self.selected_list)
             selected_lq = np_delete(valid_lq, self.selected_list)
-            print(selected_golgi.shape, selected_lq.shape)
         save_path, save_type = QFileDialog.getSaveFileName(self, "Save File", "./Golgi Gallery & LQ Histogram.pdf",
                                                            'pdf(*.pdf)')
         folder, file = os_path_split(save_path)
