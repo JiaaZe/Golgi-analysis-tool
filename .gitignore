@@ -135,3 +135,4 @@ dmypy.json
 .idea/misc.xml
 .idea/inspectionProfiles/Project_Default.xml
 model/model.h5
+config.ini
