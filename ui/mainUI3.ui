@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1260</width>
-    <height>867</height>
+    <width>1104</width>
+    <height>880</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,7 +27,7 @@
        <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="Tab1">
        <property name="contextMenuPolicy">
@@ -53,8 +53,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1199</width>
-             <height>867</height>
+             <width>1060</width>
+             <height>796</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_15">
@@ -85,8 +85,14 @@
                <bool>false</bool>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout">
+               <property name="topMargin">
+                <number>4</number>
+               </property>
                <property name="rightMargin">
                 <number>9</number>
+               </property>
+               <property name="bottomMargin">
+                <number>4</number>
                </property>
                <item>
                 <widget class="QLabel" name="label">
@@ -155,6 +161,12 @@
                <string>Model File</string>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_2">
+               <property name="topMargin">
+                <number>4</number>
+               </property>
+               <property name="bottomMargin">
+                <number>4</number>
+               </property>
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_2">
                  <property name="spacing">
@@ -228,6 +240,12 @@
                <string>Beads Information</string>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_3">
+               <property name="topMargin">
+                <number>4</number>
+               </property>
+               <property name="bottomMargin">
+                <number>4</number>
+               </property>
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,0,6">
                  <item>
@@ -308,8 +326,14 @@
                <property name="leftMargin">
                 <number>0</number>
                </property>
+               <property name="topMargin">
+                <number>4</number>
+               </property>
                <property name="rightMargin">
                 <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>4</number>
                </property>
                <item row="0" column="2">
                 <widget class="QGroupBox" name="bg_group">
@@ -574,6 +598,12 @@
                   <string>Image Information</string>
                  </property>
                  <layout class="QHBoxLayout" name="horizontalLayout_11">
+                  <property name="topMargin">
+                   <number>4</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>4</number>
+                  </property>
                   <item>
                    <widget class="QGroupBox" name="groupBox_2">
                     <property name="minimumSize">
@@ -802,6 +832,9 @@
                <string>Parameters</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_8">
+               <property name="topMargin">
+                <number>4</number>
+               </property>
                <item row="2" column="0">
                 <widget class="QFrame" name="param_bg_algorithmn">
                  <property name="sizePolicy">
@@ -2710,15 +2743,24 @@
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
-                <height>16777215</height>
+                <height>70</height>
                </size>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_10">
                <property name="rightMargin">
                 <number>0</number>
                </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
                <item>
                 <widget class="QTextBrowser" name="error_browser">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>50</height>
+                  </size>
+                 </property>
                  <property name="html">
                   <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -2837,7 +2879,23 @@ p, li { white-space: pre-wrap; }
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_8"/>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777211</height>
+               </size>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_8">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+              </layout>
              </widget>
             </item>
            </layout>
@@ -2866,6 +2924,18 @@ p, li { white-space: pre-wrap; }
            </size>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_9">
+           <property name="leftMargin">
+            <number>3</number>
+           </property>
+           <property name="topMargin">
+            <number>3</number>
+           </property>
+           <property name="rightMargin">
+            <number>3</number>
+           </property>
+           <property name="bottomMargin">
+            <number>3</number>
+           </property>
            <item>
             <widget class="QPushButton" name="start_btn">
              <property name="text">
@@ -2928,13 +2998,25 @@ p, li { white-space: pre-wrap; }
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
-                <height>300</height>
+                <height>340</height>
                </size>
               </property>
               <property name="title">
                <string>Chromatic shift calibration</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_10">
+               <property name="leftMargin">
+                <number>3</number>
+               </property>
+               <property name="topMargin">
+                <number>3</number>
+               </property>
+               <property name="rightMargin">
+                <number>3</number>
+               </property>
+               <property name="bottomMargin">
+                <number>3</number>
+               </property>
                <item row="0" column="1">
                 <layout class="QVBoxLayout" name="verticalLayout_10">
                  <item>
@@ -2968,8 +3050,8 @@ p, li { white-space: pre-wrap; }
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>1118</width>
-                    <height>265</height>
+                    <width>967</width>
+                    <height>317</height>
                    </rect>
                   </property>
                  </widget>
@@ -2982,6 +3064,18 @@ p, li { white-space: pre-wrap; }
                <string>Golgi Snapshot</string>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_9">
+               <property name="leftMargin">
+                <number>3</number>
+               </property>
+               <property name="topMargin">
+                <number>3</number>
+               </property>
+               <property name="rightMargin">
+                <number>3</number>
+               </property>
+               <property name="bottomMargin">
+                <number>3</number>
+               </property>
                <item>
                 <widget class="QFrame" name="frame">
                  <property name="frameShape">
@@ -3043,7 +3137,7 @@ p, li { white-space: pre-wrap; }
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
-                   <height>150</height>
+                   <height>149</height>
                   </size>
                  </property>
                  <property name="widgetResizable">
@@ -3054,8 +3148,8 @@ p, li { white-space: pre-wrap; }
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>1201</width>
-                    <height>251</height>
+                    <width>1050</width>
+                    <height>273</height>
                    </rect>
                   </property>
                  </widget>
