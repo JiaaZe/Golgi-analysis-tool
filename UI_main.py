@@ -1,24 +1,28 @@
 import time
 from sys import (exit as sys_exit, argv as sys_argv)
 from configparser import ConfigParser as configparser_ConfigParser
-from os.path import (exists as os_path_exists, split as os_path_split, isfile as os_path_isfile, isdir as os_path_isdir)
-from os import listdir as os_listdir
+from os.path import (exists as os_path_exists, split as os_path_split, isfile as os_path_isfile, isdir as os_path_isdir,
+                     dirname as os_path_dirname)
+from os import (listdir as os_listdir, getcwd as os_getcwd, mkdir as os_mkdir)
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QRegularExpression, pyqtSignal as Signal, QThread
 from PyQt5.QtGui import QRegularExpressionValidator
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QLineEdit, QListView, QAbstractItemView, \
     QTreeView, QWidget, QVBoxLayout
+from matplotlib.backends.backend_pdf import PdfPages
 
 from matplotlib.backends.backend_qtagg import (
     FigureCanvasQTAgg as FigureCanvas)
 from matplotlib.figure import Figure
 from matplotlib.patches import Rectangle
-from numpy import (delete as np_delete, amax as np_amax)
+from numpy import (delete as np_delete, amax as np_amax, arange as np_arange)
 
 from lq_dialog import LqDialog
 from utils import golgi_lq_2pdf
 from ui.mainUI3 import Ui_MainWindow
 from functions_for_qt import QtFunctions
+from pandas import DataFrame as pd_DataFrame
+
 import logging
 
 GOLGI_DEFAULT = 0.4
@@ -106,7 +110,7 @@ class MainWindow(QMainWindow):
         self.logger = get_logger()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.resize(1141, 800)
+        self.resize(1141, 870)
 
         self.cfg = configparser_ConfigParser()
         if os_path_exists(config_file):
@@ -190,6 +194,7 @@ class MainWindow(QMainWindow):
         self.selected_list = []
         self.ui.show_hist_btn.clicked.connect(self.show_hist)
         self.ui.save_result_btn.clicked.connect(self.save_golgi_result)
+        self.ui.save_beads_vector_map.setDisabled(True)
         self.ui.save_beads_vector_map.clicked.connect(self.save_beads_maps)
 
         self.lq_dialog = None
@@ -587,30 +592,68 @@ class MainWindow(QMainWindow):
     def show_vector_map(self):
         beads_df, pred_beads = self.func.get_beads_vector()
 
+        arrow_df = pd_DataFrame({'diff_green_y': 100 * (beads_df['green_y'] - beads_df['red_y']),
+                                 'diff_green_x': 100 * (beads_df['green_x'] - beads_df['red_x']),
+                                 'diff_blue_y': 100 * (beads_df['blue_y'] - beads_df['red_y']),
+                                 'diff_blue_x': 100 * (beads_df['blue_x'] - beads_df['red_x']),
+                                 'pred_diff_green_y': 100 * (pred_beads['green_y'] - beads_df['red_y']),
+                                 'pred_diff_green_x': 100 * (pred_beads['green_x'] - beads_df['red_x']),
+                                 'pred_diff_blue_y': 100 * (pred_beads['blue_y'] - beads_df['red_y']),
+                                 'pred_diff_blue_x': 100 * (pred_beads['blue_x'] - beads_df['red_x'])})
+
         qScrollLayout = QVBoxLayout(self.ui.scroll_beads_content)
         qfigWidget = QWidget(self.ui.scroll_beads_content)
 
-        static_canvas = FigureCanvas(Figure(figsize=(5, 5)))
+        static_canvas = FigureCanvas(Figure(figsize=(7, 7)))
+        text_size = 6
+        r = static_canvas.get_renderer()
 
         subplot_axes = static_canvas.figure.subplots(2, 2)
-        static_canvas.figure.tight_layout()
-        static_canvas.figure.subplots_adjust(hspace=0.3)
+        # static_canvas.figure.tight_layout()
+        # static_canvas.figure.subplots_adjust(hspace=0.3)
         # 0,0 original arrow
         subplot_axes[0, 0].title.set_text("original arrow")
         subplot_axes[0, 0].title.set_size(10)
+
+        x_lim = (min(beads_df["red_x"].min(), (beads_df["red_x"] + arrow_df['diff_green_x']).min(),
+                     (beads_df["red_x"] + arrow_df['diff_blue_x']).min()) - 10,
+                 max(beads_df["red_x"].max(), (beads_df["red_x"] + arrow_df['diff_green_x']).max(),
+                     (beads_df["red_x"] + arrow_df['diff_blue_x']).max()) + 10)
+        y_lim = (min(beads_df["red_y"].min(), (beads_df["red_y"] + arrow_df['diff_green_y']).min(),
+                     (beads_df["red_y"] + arrow_df['diff_blue_y']).min()) - 10,
+                 max(beads_df["red_y"].max(), (beads_df["red_y"] + arrow_df['diff_green_y']).max(),
+                     (beads_df["red_y"] + arrow_df['diff_blue_y']).max()) + 10)
+        subplot_axes[0, 0].set_xlim(x_lim)
+
+        subplot_axes[0, 0].set_ylim(y_lim)
+
+        subplot_axes[0, 1].set_xlim(x_lim)
+
+        subplot_axes[0, 1].set_ylim(y_lim)
+
         for index, row in beads_df.iterrows():
-            subplot_axes[0, 0].arrow(row['red_x'], row['red_y'], 100 * (row['green_x'] - row['red_x']),
-                                     100 * (row['green_y'] - row['red_y']), color='green', head_width=6, lw=0.4)
-            subplot_axes[0, 0].arrow(row['red_x'], row['red_y'], 100 * (row['blue_x'] - row['red_x']),
-                                     100 * (row['blue_y'] - row['red_y']), color='blue', head_width=6, lw=0.4)
+            subplot_axes[0, 0].arrow(row['red_x'], row['red_y'], arrow_df.iloc[index]["diff_green_x"],
+                                     arrow_df.iloc[index]["diff_green_y"], color='green', head_width=6, lw=0.4)
+            subplot_axes[0, 0].arrow(row['red_x'], row['red_y'], arrow_df.iloc[index]["diff_blue_x"],
+                                     arrow_df.iloc[index]["diff_blue_y"], color='blue', head_width=6, lw=0.4)
+        subplot_axes[0, 0].add_patch(
+            Rectangle((0, 0), int(self.ui.image_width.text()), int(self.ui.image_height.text()), fill=False,
+                      linewidth=1))
+        subplot_axes[0, 0].axis('off')
+
         # 0,1 shifted arrow
         subplot_axes[0, 1].title.set_text("shifted arrow")
         subplot_axes[0, 1].title.set_size(10)
         for index, row in pred_beads.iterrows():
-            subplot_axes[0, 1].arrow(row['red_x'], row['red_y'], 100 * (row['green_x'] - row['red_x']),
-                                     100 * (row['green_y'] - row['red_y']), color='green', head_width=6, lw=0.4)
-            subplot_axes[0, 1].arrow(row['red_x'], row['red_y'], 100 * (row['blue_x'] - row['red_x']),
-                                     100 * (row['blue_y'] - row['red_y']), color='blue', head_width=6, lw=0.4)
+            subplot_axes[0, 1].arrow(row['red_x'], row['red_y'], arrow_df.iloc[index]["pred_diff_green_x"],
+                                     arrow_df.iloc[index]["pred_diff_green_y"], color='green', head_width=6, lw=0.4)
+            subplot_axes[0, 1].arrow(row['red_x'], row['red_y'], arrow_df.iloc[index]["pred_diff_blue_x"],
+                                     arrow_df.iloc[index]["pred_diff_blue_y"], color='blue', head_width=6, lw=0.4)
+        subplot_axes[0, 1].add_patch(
+            Rectangle((0, 0), int(self.ui.image_width.text()), int(self.ui.image_height.text()), fill=False,
+                      linewidth=1))
+        subplot_axes[0, 1].axis('off')
+
         # 1,0 original related
         subplot_axes[1, 0].title.set_text("original related")
         subplot_axes[1, 0].title.set_size(10)
@@ -643,6 +686,7 @@ class MainWindow(QMainWindow):
         self.ui.scroll_beads_content.setLayout(qScrollLayout)
 
         self.ui.scroll_beads_content.show()
+        self.ui.save_beads_vector_map.setEnabled(True)
 
     def save_beads_maps(self):
         save_path, save_type = QFileDialog.getSaveFileName(self, "Save File", "./beads vector maps",
