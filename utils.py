@@ -164,8 +164,7 @@ def img_substract(img, substraction):
 def patch_image(images_input, patched_height, patched_weight, patched_channel, step):
     input_shape = images_input.shape
     if len(input_shape) != 4:
-        print("The dims of input images are not 4.")
-        return None
+        raise Exception("The dims of input images are not 4.")
     images_patched_list = []
     batch = images_input.shape[0]
     for i in range(batch):
