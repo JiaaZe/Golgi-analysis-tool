@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>1104</width>
-    <height>880</height>
+    <height>875</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>GolgiAnalysisTool</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="minimumSize">
@@ -3149,7 +3149,7 @@ p, li { white-space: pre-wrap; }
                     <x>0</x>
                     <y>0</y>
                     <width>1050</width>
-                    <height>273</height>
+                    <height>268</height>
                    </rect>
                   </property>
                  </widget>

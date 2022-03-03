@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1104, 880)
+        MainWindow.resize(1104, 875)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setMinimumSize(QtCore.QSize(600, 715))
         self.centralwidget.setObjectName("centralwidget")
@@ -1099,7 +1099,7 @@ class Ui_MainWindow(object):
         self.scroll_golgi.setWidgetResizable(True)
         self.scroll_golgi.setObjectName("scroll_golgi")
         self.scroll_golgi_content = QtWidgets.QWidget()
-        self.scroll_golgi_content.setGeometry(QtCore.QRect(0, 0, 1050, 273))
+        self.scroll_golgi_content.setGeometry(QtCore.QRect(0, 0, 1050, 268))
         self.scroll_golgi_content.setObjectName("scroll_golgi_content")
         self.scroll_golgi.setWidget(self.scroll_golgi_content)
         self.verticalLayout_9.addWidget(self.scroll_golgi)
@@ -1118,7 +1118,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "GolgiAnalysisTool"))
         self.Tab1.setToolTip(_translate("MainWindow", "<html><head/><body><p><br/></p></body></html>"))
         self.image_folder_group.setTitle(_translate("MainWindow", "Image Folder"))
         self.label.setText(_translate("MainWindow", "Multiple directories supported, but they need to share same beads information."))
