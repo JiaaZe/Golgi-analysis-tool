@@ -5,7 +5,6 @@
 
 ## INTRODUCTION 
 
-1. Download model file from https://github.com/JiaaZe/Golgi-analysis-tool/releases/tag/v0.0.1.
-2. Two ways to get exe file:
+1. Two ways to get exe file:
    - a. Download zip file from the latest release
-   - b. Download source code and run `pyinstaller --distpath ./exe --workpath ./exe/build GolgiAnalysisTool.spec`. The exe file is in `./exe/GolgiAnalysisTool` folder.
+   - b. Download source code and run `pyinstaller --noconfirm --distpath ./exe --workpath ./exe/build GolgiAnalysisTool.spec`. The exe file is in `./exe/GolgiAnalysisTool` folder.
