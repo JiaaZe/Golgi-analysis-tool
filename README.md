@@ -6,5 +6,5 @@
 ## INTRODUCTION 
 
 1. Two ways to get exe file:
-   - a. Download zip file from the latest release.
+   - a. Download zip file from the latest release and extract.
    - b. Download source code and run `pyinstaller --noconfirm --distpath ./exe --workpath ./exe/build GolgiAnalysisTool.spec`. The exe file is in `./exe/GolgiAnalysisTool` folder.
