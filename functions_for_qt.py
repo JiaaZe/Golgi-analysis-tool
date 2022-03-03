@@ -35,7 +35,7 @@ class QtFunctions(QObject):
     def __init__(self, lastModelPath, lastModel, logger: logging.Logger):
         super().__init__()
         self.logger = logger
-        logger.info("function initial")
+        # logger.info("function initial")
         self.config.read(self.config_file, encoding="utf-8")
 
         self.folder_path = self.config.get("file_path", "folder_path").split(";")
@@ -122,7 +122,7 @@ class QtFunctions(QObject):
                                       mode="symmetric")
             # patchify to 256*256*3
             images, all_shape, single_shape = patch_image(golgi_images_pad, 256, 256, 3, 256)
-            self.logger.info("Image shape: {}".format(images.shape))
+            self.logger.info("Patched image shape: {}".format(images.shape))
             # normalization
             images_norm = keras_norm(images, axis=1)
         except Exception as e:
@@ -220,6 +220,7 @@ class QtFunctions(QObject):
         self.process_finished.emit(1)
 
     def load_beads(self):
+        self.logger.info("Beads path: {}".format(self.beads_path))
         if self.beads_mode == 1:
             lr_x_blue, lr_y_blue, lr_x_green, lr_y_green, beads_df, pred_beads = train_beads(self.beads_path)
             self.lr_model = [lr_x_blue, lr_y_blue, lr_x_green, lr_y_green]
@@ -258,6 +259,7 @@ class QtFunctions(QObject):
             raise Exception("Wrong beads mode in {}".format(self.config_file))
 
     def read_images(self):
+        self.logger.info("Image folder path: {}".format(self.folder_path))
         golgiImages = np_zeros((len(self.folder_path), self.img_height, self.img_width, self.img_channels),
                                dtype=np_uint16)
         self.logger.info("Number of folders: {}".format(len(self.folder_path)))

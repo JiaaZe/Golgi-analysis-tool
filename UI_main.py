@@ -45,8 +45,8 @@ def get_logger():
     if not os_path_exists(log_path):
         os_mkdir(log_path)
 
-    file_handler = RotatingFileHandler(logfile, maxBytes=2000,
-                                       backupCount=5,
+    file_handler = RotatingFileHandler(logfile, maxBytes=10240,
+                                       backupCount=3,
                                        encoding='utf-8', mode='w')
     file_handler.setLevel(logging.INFO)
 
@@ -536,7 +536,12 @@ class MainWindow(QMainWindow):
         self.ui.scroll_golgi_content.setLayout(qScrollLayout)
         self.ui.scroll_golgi_content.show()
 
+        self.ui.show_hist_btn.setEnabled(True)
+        self.ui.save_result_btn.setEnabled(True)
+        self.ui.start_btn.setEnabled(True)
+
     def start_process(self):
+        self.ui.start_btn.setDisabled(True)
         self.ui.progress_text.clear()
         # self.ui.beads_vector_scroll_content.hide()
         # self.ui.scroll_content.hide()
