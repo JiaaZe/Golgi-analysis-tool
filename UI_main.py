@@ -200,6 +200,8 @@ class MainWindow(QMainWindow):
         self.ui.save_beads_vector_map.setDisabled(True)
         self.ui.save_beads_vector_map.clicked.connect(self.save_beads_maps)
 
+        self.ui.show_hist_btn.setDisabled(True)
+        self.ui.save_result_btn.setDisabled(True)
         self.lq_dialog = None
 
         self.saved_model = None
