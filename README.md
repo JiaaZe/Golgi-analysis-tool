@@ -1,7 +1,7 @@
 # Golgi-analysis-tool
 
 
-## The Golgi analysis method is based on the paper _A novel imaging methodfor quantitative Golgi localization reveals differential intra-Golgi trafficking of secretory cargoes_(https://pubmed.ncbi.nlm.nih.gov/26764092/)
+## The Golgi analysis method is based on the paper _A novel imaging methodfor quantitative Golgi localization reveals differential intra-Golgi trafficking of secretory cargoes_ (https://pubmed.ncbi.nlm.nih.gov/26764092/)
 
 ## INTRODUCTION 
 
