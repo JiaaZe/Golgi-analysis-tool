@@ -689,8 +689,8 @@ class MainWindow(QMainWindow):
         subplot_axes[1, 0].set_ylim(xy_lim)
         subplot_axes[1, 0].set_xticks(xy_ticks, xy_labels)
         subplot_axes[1, 0].set_yticks(xy_ticks, xy_labels)
-        subplot_axes[1, 0].scatter(scatter_df["green_x"], scatter_df["green_y"], c='g', s=5, alpha=0.3)
-        subplot_axes[1, 0].scatter(scatter_df["blue_x"], scatter_df["blue_y"], c='b', s=5, alpha=0.3)
+        subplot_axes[1, 0].scatter(scatter_df["green_x"], scatter_df["green_y"], c='g', s=5, alpha=0.4)
+        subplot_axes[1, 0].scatter(scatter_df["blue_x"], scatter_df["blue_y"], c='b', s=5, alpha=0.4)
         subplot_axes[1, 0].axvline(c="black", lw=1)
         subplot_axes[1, 0].axhline(c="black", lw=1)
         subplot_axes[1, 0].spines['top'].set_visible(False)
@@ -707,14 +707,11 @@ class MainWindow(QMainWindow):
         text_height = bb_title.ymax - bb_title.ymin
 
         green_text = subplot_axes[1, 0].text(bb_title.x1, bb_title.y0 - text_height / 2,
-                                             "X={:<2.1f}±{:<2.1f} nm\nY={:<2.1f}±{:<2.1f} nm".format(scatter_df[
-                                                                                                         'green_x'].mean(),
-                                                                                                     scatter_df[
-                                                                                                         'green_x'].std(),
-                                                                                                     scatter_df[
-                                                                                                         'green_y'].mean(),
-                                                                                                     scatter_df[
-                                                                                                         'green_y'].std()),
+                                             "X={:<2.1f}±{:<2.1f} nm\nY={:<2.1f}±{:<2.1f} nm".format(
+                                                 scatter_df['green_x'].mean(),
+                                                 scatter_df['green_x'].std(),
+                                                 scatter_df['green_y'].mean(),
+                                                 scatter_df['green_y'].std()),
                                              ha="right", va="top", ma="left", size=text_size, c='g')
         bb_green = green_text.get_window_extent(renderer=r)
         bb_green = bb_green.transformed(subplot_axes[1, 0].transData.inverted())
@@ -722,14 +719,11 @@ class MainWindow(QMainWindow):
         green_width = bb_green.xmax - bb_green.xmin
 
         blue_text = subplot_axes[1, 0].text(bb_green.x0, bb_green.y0,
-                                            "X={:<2.1f}±{:<2.1f} nm\nY={:<2.1f}±{:<2.1f} nm".format(scatter_df[
-                                                                                                        'blue_x'].mean(),
-                                                                                                    scatter_df[
-                                                                                                        'blue_x'].std(),
-                                                                                                    scatter_df[
-                                                                                                        'blue_y'].mean(),
-                                                                                                    scatter_df[
-                                                                                                        'blue_y'].std()),
+                                            "X={:<2.1f}±{:<2.1f} nm\nY={:<2.1f}±{:<2.1f} nm".format(
+                                                scatter_df['blue_x'].mean(),
+                                                scatter_df['blue_x'].std(),
+                                                scatter_df['blue_y'].mean(),
+                                                scatter_df['blue_y'].std()),
                                             ha="left", va="top", ma="left", size=text_size, c='b')
         bb_blue = blue_text.get_window_extent(renderer=r)
         bb_blue = bb_blue.transformed(subplot_axes[1, 0].transData.inverted())
@@ -768,7 +762,7 @@ class MainWindow(QMainWindow):
         bbox_shift = text_height / 3
         bbox_xy = (bb_blue.x0 - text_height / 3, bb_count.y0)
         bbox_width = max_width + 2 * bbox_shift
-        bbox_height = bb_title.y1 - bb_count.y0
+        bbox_height = bb_title.y1 - bb_count.y0 - bbox_shift / 2
 
         subplot_axes[1, 0].add_patch(
             Rectangle(bbox_xy, bbox_width, bbox_height, fc=(1, 1, 1), ec=(0, 0, 0), lw=0.5, alpha=0.5))
@@ -781,8 +775,8 @@ class MainWindow(QMainWindow):
         subplot_axes[1, 1].set_xticks(xy_ticks, xy_labels)
         subplot_axes[1, 1].set_yticks(xy_ticks, xy_labels)
 
-        subplot_axes[1, 1].scatter(scatter_df["pred_green_x"], scatter_df["pred_green_y"], c='g', s=5, alpha=0.3)
-        subplot_axes[1, 1].scatter(scatter_df["pred_blue_x"], scatter_df["pred_blue_y"], c='b', s=5, alpha=0.3)
+        subplot_axes[1, 1].scatter(scatter_df["pred_green_x"], scatter_df["pred_green_y"], c='g', s=5, alpha=0.4)
+        subplot_axes[1, 1].scatter(scatter_df["pred_blue_x"], scatter_df["pred_blue_y"], c='b', s=5, alpha=0.4)
 
         subplot_axes[1, 1].axvline(c="black", lw=1)
         subplot_axes[1, 1].axhline(c="black", lw=1)
@@ -798,14 +792,11 @@ class MainWindow(QMainWindow):
         bb_title = bb_title.transformed(subplot_axes[1, 1].transData.inverted())
 
         green_text = subplot_axes[1, 1].text(bb_title.x1, bb_title.y0 - text_height / 2,
-                                             "X={:<2.1f}±{:<2.1f} nm\nY={:<2.1f}±{:<2.1f} nm".format(scatter_df[
-                                                                                                         'green_x'].mean(),
-                                                                                                     scatter_df[
-                                                                                                         'green_x'].std(),
-                                                                                                     scatter_df[
-                                                                                                         'green_y'].mean(),
-                                                                                                     scatter_df[
-                                                                                                         'green_y'].std()),
+                                             "X={:<2.1f}±{:<2.1f} nm\nY={:<2.1f}±{:<2.1f} nm".format(
+                                                 scatter_df['pred_green_x'].mean(),
+                                                 scatter_df['pred_green_x'].std(),
+                                                 scatter_df['pred_green_y'].mean(),
+                                                 scatter_df['pred_green_y'].std()),
                                              ha="right", va="top", ma="left", size=text_size, c='g')
         bb_green = green_text.get_window_extent(renderer=r)
         bb_green = bb_green.transformed(subplot_axes[1, 1].transData.inverted())
@@ -813,15 +804,11 @@ class MainWindow(QMainWindow):
         green_width = bb_green.xmax - bb_green.xmin
 
         blue_text = subplot_axes[1, 1].text(bb_green.x0, bb_green.y0,
-
-                                            "X={:<2.1f}±{:<2.1f} nm\nY={:<2.1f}±{:<2.1f} nm".format(scatter_df[
-                                                                                                        'blue_x'].mean(),
-                                                                                                    scatter_df[
-                                                                                                        'blue_x'].std(),
-                                                                                                    scatter_df[
-                                                                                                        'blue_y'].mean(),
-                                                                                                    scatter_df[
-                                                                                                        'blue_y'].std()),
+                                            "X={:<2.1f}±{:<2.1f} nm\nY={:<2.1f}±{:<2.1f} nm".format(
+                                                scatter_df['pred_blue_x'].mean(),
+                                                scatter_df['pred_blue_x'].std(),
+                                                scatter_df['pred_blue_y'].mean(),
+                                                scatter_df['pred_blue_y'].std()),
                                             ha="left", va="top", ma="left", size=text_size, c='b')
 
         bb_blue = blue_text.get_window_extent(renderer=r)
@@ -861,7 +848,7 @@ class MainWindow(QMainWindow):
         bbox_shift = text_height / 3
         bbox_xy = (bb_blue.x0 - text_height / 3, bb_count.y0)
         bbox_width = max_width + 2 * bbox_shift
-        bbox_height = bb_title.y1 - bb_count.y0
+        bbox_height = bb_title.y1 - bb_count.y0 - bbox_shift / 2
 
         subplot_axes[1, 1].add_patch(
             Rectangle(bbox_xy, bbox_width, bbox_height, fc=(1, 1, 1), ec=(0, 0, 0), lw=0.5, alpha=0.5))
