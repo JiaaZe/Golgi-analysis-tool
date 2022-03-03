@@ -215,8 +215,8 @@ class QtFunctions(QObject):
             #     excel_writer.close()
             #     excel_writer.handles = None
 
-        self.append_text.emit("5.Analysis predicted result sucessfully.")
-        self.logger.info("5.Analysis predicted result sucessfully.")
+        self.append_text.emit("5. Analysis predicted result sucessfully.")
+        self.logger.info("5. Analysis predicted result sucessfully.")
         self.process_finished.emit(1)
 
     def load_beads(self):

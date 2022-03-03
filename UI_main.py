@@ -24,6 +24,7 @@ from functions_for_qt import QtFunctions
 from pandas import DataFrame as pd_DataFrame
 
 import logging
+from logging.handlers import RotatingFileHandler
 
 GOLGI_DEFAULT = 0.4
 PIXEL_DEFAULT = 0.05
@@ -39,23 +40,25 @@ def get_logger():
 
     datetime = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
     log_path = './Logs/'
-    log_name = log_path + datetime + '.log'
+    log_name = log_path + "logFile" + '.log'
     logfile = log_name
     if not os_path_exists(log_path):
         os_mkdir(log_path)
 
-    handler = logging.FileHandler(logfile, mode='w')
-    handler.setLevel(logging.INFO)
+    file_handler = RotatingFileHandler(logfile, maxBytes=2000,
+                                       backupCount=5,
+                                       encoding='utf-8', mode='w')
+    file_handler.setLevel(logging.INFO)
 
     formatter = logging.Formatter("%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s")
-    handler.setFormatter(formatter)
+    file_handler.setFormatter(formatter)
 
     console_logger = logging.StreamHandler()
     console_logger.setLevel(logging.INFO)
     console_logger.setFormatter(formatter)
 
     logger.addHandler(console_logger)
-    logger.addHandler(handler)
+    logger.addHandler(file_handler)
 
     return logger
 
