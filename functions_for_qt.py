@@ -46,8 +46,9 @@ class QtFunctions(QObject):
 
         # 1,2,3
         self.bg_mode = self.config.getint("parameters", "bg_mode")
-        self.R2_R1_DIFF = self.config.getfloat("parameters", "r2_r1_diff")
-        self.MAX_CONTOURS_AREA = self.config.getint("parameters", "max_contours_area")
+        if self.bg_mode == 3:
+            self.R2_R1_DIFF = self.config.getfloat("parameters", "r2_r1_diff")
+            self.MAX_CONTOURS_AREA = self.config.getint("parameters", "max_contours_area")
         self.PRED_THRESHOLD = self.config.getfloat("parameters", "pred_threshold")
         self.SELECTED_THRESHOLD = self.config.getfloat("parameters", "selected_threshold")
 

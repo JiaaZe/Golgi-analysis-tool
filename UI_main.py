@@ -403,7 +403,7 @@ class MainWindow(QMainWindow):
                 self.cfg['image_information']['blue_bgst_identifier'] = self.ui.blue_bgst_identifier.text()
             else:
                 err_msg += "blue_bgst_identifier is empty.\n"
-        if bg_mode == "2":
+        if bg_mode == "3":
             if len(r2_r1_diff) > 0:
                 self.cfg['parameters']['R2_R1_DIFF'] = r2_r1_diff
             else:
