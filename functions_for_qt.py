@@ -36,52 +36,54 @@ class QtFunctions(QObject):
         super().__init__()
         self.logger = logger
         # logger.info("function initial")
-        self.config.read(self.config_file, encoding="utf-8")
+        try:
+            self.config.read(self.config_file, encoding="utf-8")
 
-        self.folder_path = self.config.get("file_path", "folder_path").split(";")
-        self.imagesId = [os_path_split(image_file)[-1] for image_file in self.folder_path]
-        self.beads_mode = self.config.getint("file_path", "beads_mode")
-        self.beads_path = self.config.get("file_path", "beads_path")
-        self.model_path = self.config.get("file_path", "model_path")
+            self.folder_path = self.config.get("file_path", "folder_path").split(";")
+            self.imagesId = [os_path_split(image_file)[-1] for image_file in self.folder_path]
+            self.beads_mode = self.config.getint("file_path", "beads_mode")
+            self.beads_path = self.config.get("file_path", "beads_path")
+            self.model_path = self.config.get("file_path", "model_path")
 
-        # 1,2,3
-        self.bg_mode = self.config.getint("parameters", "bg_mode")
-        if self.bg_mode == 3:
-            self.R2_R1_DIFF = self.config.getfloat("parameters", "r2_r1_diff")
-            self.MAX_CONTOURS_AREA = self.config.getint("parameters", "max_contours_area")
-        self.PRED_THRESHOLD = self.config.getfloat("parameters", "pred_threshold")
-        self.SELECTED_THRESHOLD = self.config.getfloat("parameters", "selected_threshold")
+            # 1,2,3
+            self.bg_mode = self.config.getint("parameters", "bg_mode")
+            if self.bg_mode == 3:
+                self.R2_R1_DIFF = self.config.getfloat("parameters", "r2_r1_diff")
+                self.MAX_CONTOURS_AREA = self.config.getint("parameters", "max_contours_area")
+            self.PRED_THRESHOLD = self.config.getfloat("parameters", "pred_threshold")
+            self.SELECTED_THRESHOLD = self.config.getfloat("parameters", "selected_threshold")
+            if self.bg_mode == 1:
+                self.red_bgst_identifier = self.config.get("image_information", "red_bgst_identifier")
+                self.green_bgst_identifier = self.config.get("image_information", "green_bgst_identifier")
+                self.blue_bgst_identifier = self.config.get("image_information", "blue_bgst_identifier")
+            else:
+                self.red_identifier = self.config.get("image_information", "red_identifier")
+                self.green_identifier = self.config.get("image_information", "green_identifier")
+                self.blue_identifier = self.config.get("image_information", "blue_identifier")
 
-        self.red_identifier = self.config.get("image_information", "red_identifier")
-        self.green_identifier = self.config.get("image_information", "green_identifier")
-        self.blue_identifier = self.config.get("image_information", "blue_identifier")
+            self.img_height = self.config.getint("image_information", "image_height")
+            self.img_width = self.config.getint("image_information", "image_width")
 
-        self.red_bgst_identifier = self.config.get("image_information", "red_bgst_identifier")
-        self.green_bgst_identifier = self.config.get("image_information", "green_bgst_identifier")
-        self.blue_bgst_identifier = self.config.get("image_information", "blue_bgst_identifier")
+            # self.red_mean5sd = self.config.get("bg_information", "red_mean5sd")
+            # self.green_mean5sd = self.config.get("bg_information", "green_mean5sd")
+            # self.blue_mean5sd = self.config.get("bg_information", "blue_mean5sd")
 
-        self.img_height = self.config.getint("image_information", "image_height")
-        self.img_width = self.config.getint("image_information", "image_width")
+            self.red_30sd = self.config.get("bg_information", "red_30sd")
+            self.green_30sd = self.config.get("bg_information", "green_30sd")
+            self.blue_30sd = self.config.get("bg_information", "blue_30sd")
+
+            # 1 or 0 boolean
+            self.excel_cell_ref = self.config.get("bg_information", "excel_cell_ref") == "1"
+        except Exception as e:
+            self.logger.error("Error when read config: {}".format(e), exc_info=True)
+            raise Exception("Error when read config: {}".format(e))
+
         self.new_size = max(self.img_height, self.img_width)
         self.img_channels = 3
         self.bg_roi_name = "BG-RoiSet.zip"
-
-        self.red_mean5sd = self.config.get("bg_information", "red_mean5sd")
-        self.green_mean5sd = self.config.get("bg_information", "green_mean5sd")
-        self.blue_mean5sd = self.config.get("bg_information", "blue_mean5sd")
-
-        self.red_30sd = self.config.get("bg_information", "red_30sd")
-        self.green_30sd = self.config.get("bg_information", "green_30sd")
-        self.blue_30sd = self.config.get("bg_information", "blue_30sd")
-
-        # 1 or 0 boolean
-        self.excel_cell_ref = self.config.get("bg_information", "excel_cell_ref") == "1"
-
         self.beads_vector = []
-
         self.valid_lq = None
         self.valid_golgi = None
-
         self.progress_browser = None
         if lastModelPath is not None and lastModelPath == self.model_path:
             self.model = lastModel
