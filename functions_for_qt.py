@@ -353,7 +353,7 @@ class QtFunctions(QObject):
                     if red_bgst_tif is not None and green_bgst_tif is not None and blue_bgst_tif is not None:
                         composite = np_dstack((red_bgst_tif, green_bgst_tif, blue_bgst_tif))
                     else:
-                        Exception("No bgst tif files")
+                        raise Exception("No bgst tif files")
                         # cy3_bgst_tif = img_substract(red_tif, mean_5std[0])
                         # gfp_bgst_tif = img_substract(green_tif, mean_5std[1])
                         # cy5_bgst_tif = img_substract(blue_tif, mean_5std[2])
