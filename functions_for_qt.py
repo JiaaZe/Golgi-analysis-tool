@@ -406,6 +406,7 @@ class QtFunctions(QObject):
                     break
                 std_arr = []
                 composited = []
+                rgb_file_path = [r_file_path, g_file_path, b_file_path]
                 for i, img_1c in enumerate([red_tif, green_tif, blue_tif]):
                     try:
                         bgst_, mean, std = find_bg_mean(img_1c, self.MAX_CONTOURS_AREA, self.R2_R1_DIFF)
@@ -413,7 +414,7 @@ class QtFunctions(QObject):
                         raise e
                     std_arr.append(std)
                     composited.append(bgst_)
-                    save_tif(image_id, "BGST_{}.tif".format(i), bgst_)
+                    save_tif("", rgb_file_path[i].replace(".tif", "-BGST.tif"), bgst_)
                 composite_bgst = np_dstack(composited)
                 if len(composite_bgst) > 0:
                     golgiImages[n] = composite_bgst
