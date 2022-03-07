@@ -295,12 +295,15 @@ class QtFunctions(QObject):
                     elif self.red_bgst_identifier.upper() in file_name.upper() \
                             and file_name.upper().endswith(".TIF"):
                         red_bgst_tif = read_tif(file_path, self.img_height, self.img_width)
+                        r_file_path = file_path
                     elif self.green_bgst_identifier.upper() in file_name.upper() \
                             and file_name.upper().endswith(".TIF"):
                         green_bgst_tif = read_tif(file_path, self.img_height, self.img_width)
+                        g_file_path = file_path
                     elif self.blue_bgst_identifier.upper() in file_name.upper() \
                             and file_name.upper().endswith(".TIF"):
                         blue_bgst_tif = read_tif(file_path, self.img_height, self.img_width)
+                        b_file_path = file_path
                 elif self.bg_mode == 2:
                     # Read original tif files
                     if self.red_identifier.upper() in file_name.upper() \
@@ -329,11 +332,11 @@ class QtFunctions(QObject):
             if self.bg_mode == 1:
                 if bg_info_path is None and self.excel_cell_ref:
                     err_msg += "Lack background information csv file. "
-                if red_tif is None:
+                if red_bgst_tif is None:
                     err_msg += "Lack red channel tif."
-                if blue_tif is None:
+                if blue_bgst_tif is None:
                     err_msg += "Lack blue channel tif."
-                if green_tif is None:
+                if green_bgst_tif is None:
                     err_msg += "Lack green channel tif."
                 else:
                     try:
