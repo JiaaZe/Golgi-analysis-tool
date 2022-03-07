@@ -289,18 +289,19 @@ class MainWindow(QMainWindow):
         self.ui.model_path_line_edit.setText(self.cfg.get("file_path", "model_path"))
 
         self.ui.bg_mode_combobox.setCurrentIndex(self.cfg.getint("parameters", "bg_mode") - 1)
-        self.ui.param_r2_r1_diff.setText(self.cfg.get("parameters", "r2_r1_diff"))
-        self.ui.param_contours_area_max.setText(self.cfg.get("parameters", "max_contours_area"))
+        if self.cfg.getint("parameters", "bg_mode") == 3:
+            self.ui.param_r2_r1_diff.setText(self.cfg.get("parameters", "r2_r1_diff"))
+            self.ui.param_contours_area_max.setText(self.cfg.get("parameters", "max_contours_area"))
         self.ui.param_pixel_threshold.setText(self.cfg.get("parameters", "pred_threshold"))
         self.ui.param_golgi_threshold.setText(self.cfg.get("parameters", "selected_threshold"))
-
-        self.ui.red_identifier.setText(self.cfg.get("image_information", "red_identifier"))
-        self.ui.green_identifier.setText(self.cfg.get("image_information", "green_identifier"))
-        self.ui.blue_identifier.setText(self.cfg.get("image_information", "blue_identifier"))
-
-        self.ui.red_bgst_identifier.setText(self.cfg.get("image_information", "red_bgst_identifier"))
-        self.ui.green_bgst_identifier.setText(self.cfg.get("image_information", "green_bgst_identifier"))
-        self.ui.blue_bgst_identifier.setText(self.cfg.get("image_information", "blue_bgst_identifier"))
+        if self.cfg.getint("parameters", "bg_mode") != 1:
+            self.ui.red_identifier.setText(self.cfg.get("image_information", "red_identifier"))
+            self.ui.green_identifier.setText(self.cfg.get("image_information", "green_identifier"))
+            self.ui.blue_identifier.setText(self.cfg.get("image_information", "blue_identifier"))
+        else:
+            self.ui.red_bgst_identifier.setText(self.cfg.get("image_information", "red_bgst_identifier"))
+            self.ui.green_bgst_identifier.setText(self.cfg.get("image_information", "green_bgst_identifier"))
+            self.ui.blue_bgst_identifier.setText(self.cfg.get("image_information", "blue_bgst_identifier"))
 
         self.ui.image_height.setText(self.cfg.get("image_information", "image_height"))
         self.ui.image_width.setText(self.cfg.get("image_information", "image_width"))
