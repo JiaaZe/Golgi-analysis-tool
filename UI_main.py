@@ -152,7 +152,7 @@ class MainWindow(QMainWindow):
         self.ui.next_btn.clicked.connect(self.next_btn_handler)
 
         # textChanged
-        self.ui.folder_line_edit.textChanged.connect(self.handle_textchanged)
+        self.ui.folder_line_edit.textChanged.connect(self.handle_folder_changed)
         self.ui.model_path_line_edit.textChanged.connect(self.handle_textchanged)
         self.ui.bead_line_edit.textChanged.connect(self.handle_textchanged)
 
@@ -205,6 +205,17 @@ class MainWindow(QMainWindow):
         self.saved_model_path = None
 
         self.beads_maps = None
+
+    def handle_folder_changed(self):
+        self.ui.next_btn.setEnabled(False)
+        self.ui.start_btn.setEnabled(False)
+        self.ui.error_browser.clear()
+        folder_list = self.ui.folder_line_edit.text().split(";")
+        if len(folder_list) > 1:
+            self.ui.excel_cell_ref_ratio.setChecked(True)
+            self.ui.read_data_ratio.setDisabled(True)
+        else:
+            self.ui.read_data_ratio.setEnabled(True)
 
     def handle_textchanged(self):
         self.ui.next_btn.setEnabled(False)
