@@ -478,19 +478,45 @@ class MainWindow(QMainWindow):
 
         # Check identifier for each image folder
         folder_list = folder_path.split(";")
+        for folder in folder_list:
+            normal_identifier_flag = [0, 0, 0]
+            bgst_identifier_flag = [0, 0, 0]
+            excel_flag = False
+            roi_flag = False
+            file_list = os_listdir(folder)
+            for file_name in file_list:
+                file_name = file_name.upper()
+                if bg_mode == "1":
+                    # need bgst identifier
+                    for i in range(3):
+                        if bgst_identifier[i] in file_name and bgst_identifier[(i - 2) % 3] not in file_name and \
+                                bgst_identifier[(i - 1) % 3] not in file_name:
+                            bgst_identifier_flag[i] = bgst_identifier_flag[i] + 1
+                        # Check if excel cell exists in image folder when excel_cell_ref == 1
+                    if self.ui.excel_cell_ref_ratio.isChecked():
+                        if file_name.endswith("xlsx".upper()) or file_name.endswith("xls".upper()) \
+                                or file_name.endswith("csv".upper()):
+                            excel_flag = True
+                else:
+                    # need normal identifier
+                    for i in range(3):
+                        if normal_identifier[i] in file_name and normal_identifier[(i - 2) % 3] not in file_name and \
+                                normal_identifier[(i - 1) % 3] not in file_name:
+                            normal_identifier_flag[i] = normal_identifier_flag[i] + 1
+                    if bg_mode == "2" and "BG-RoiSet.zip".upper() in file_name:
+                        roi_flag = True
+            if bg_mode == "1":
+                if sum(bgst_identifier_flag) != 3:
+                    err_msg += "BGST identifier can not identify channel images in the folder: {}\n".format(folder)
+                if self.ui.excel_cell_ref_ratio.isChecked() and not excel_flag:
+                    err_msg += "Path {} has no excel file. Bue choose background data type as excel " \
+                               "cell reference".format(folder)
+            else:
+                if sum(normal_identifier_flag) != 3:
+                    err_msg += "Normal identifier an not identify channel images in the folder: {}\n".format(folder)
+                if bg_mode == "2" and not roi_flag:
+                    err_msg += "Path {} has no BG-RoiSet.zip file".format(folder)
 
-        # Check if excel cell exists in image folder when excel_cell_ref == 1
-        if self.ui.excel_cell_ref_ratio.isChecked():
-            for folder in folder_list:
-                file_list = os_listdir(folder)
-                flag = False
-                for file in file_list:
-                    if file.endswith("xlsx") or file.endswith("xls") or file.endswith("csv"):
-                        flag = True
-                        break
-                if not flag:
-                    err_msg += "Path {} has no excel file. Bue choose background data type as excel cell reference".format(
-                        folder)
         if len(err_msg) > 0:
             n_enter = err_msg.count("\n")
             self.ui.next_btn.setDisabled(True)
