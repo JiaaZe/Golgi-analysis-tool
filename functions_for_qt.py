@@ -95,132 +95,134 @@ class QtFunctions(QObject):
     def pipeline(self):
         self.logger.info('start...thread id: {}'.format(QThread.currentThread()))
         self.logger.info('pipeline doing stuff in: {}'.format(QThread.currentThread()))
-        # 1. Read beads and Train beads chromatic shift LinearRegression Model
         try:
-            self.load_beads()
-        except Exception as e:
-            self.logger.error("Error when load beads information: {}".format(e), exc_info=True)
-            raise Exception("Error when load beads information: {}".format(e))
-        else:
-            self.logger.info("1. Reading beads and training chromatic shift model sucessfully.")
-            self.append_text.emit("1. Reading beads and training chromatic shift model sucessfully.")
-        # 2. Read images
-        try:
-            self.beads_finished.emit(1)
-            golgi_images, bg_30SD = self.read_images()
-        except Exception as e:
-            self.logger.error("Error when load images: {}".format(e), exc_info=True)
-            raise Exception("Error when load images: {}".format(e))
-        else:
-            self.append_text.emit("2. Reading images sucessfully.")
-            self.logger.info("2. Reading images sucessfully.")
-            ...
-        # 3. Preprocessing images.
-        try:
-            h_padding = int((self.new_size - self.img_height) / 2)
-            w_padding = int((self.new_size - self.img_width) / 2)
-            # self.new_size = max(self.img_width,self.img_height)
-            # padding to (self.new_size, self.new_size,3)
-            golgi_images_pad = np_pad(golgi_images, ((0, 0), (h_padding, h_padding), (w_padding, w_padding), (0, 0)),
-                                      mode="symmetric")
-            # patchify to 256*256*3
-            images, all_shape, single_shape = patch_image(golgi_images_pad, 256, 256, 3, 256)
-            self.logger.info("Patched image shape: {}".format(images.shape))
-            # normalization
-            images_norm = keras_norm(images, axis=1)
-        except Exception as e:
-            self.logger.error("Error when Load model and prediction: {}".format(e), exc_info=True)
-            raise Exception("Error when Load model and prediction: {}".format(e))
-        else:
-            self.append_text.emit("3. Preprocessing images sucessfully.")
-            self.logger.info("3. Preprocessing images sucessfully.")
-
-        # 4. Load model and prediction
-        try:
-            if self.model is None:
-                self.model = load_model_func(self.model_path)
-            preds = self.model.predict(images_norm, verbose=1)
-
-            pred_unpatched = unpatch_images(preds, all_shape, single_shape, 256, 256, self.img_height, self.img_width)
-            pred_unpadding = pred_unpatched[:, h_padding:self.new_size - h_padding, w_padding:self.new_size - w_padding,
-                             :]
-        except Exception as e:
-            self.logger.error("Error when Load model and prediction: {}".format(e), exc_info=True)
-            raise Exception("Error when Load model and prediction: {}".format(e))
-        else:
-            self.append_text.emit("4. Load model and prediction sucessfully.")
-            self.logger.info("4. Load model and prediction sucessfully.")
-            ...
-        # 5.Analysis predicted result
-        totalLQ = []
-        for j, pred in enumerate(pred_unpadding):
-            composited_golgi = golgi_images[j]
-            # convert prediction to contours
-            golgi_contours = pred_2_contours(composited_golgi, pred, self.PRED_THRESHOLD, self.SELECTED_THRESHOLD)
-            # filtering golgi by peak check
+            # 1. Read beads and Train beads chromatic shift LinearRegression Model
             try:
-                golgi, golgi_rect_coord, golgi_centroid, invalid_golgi = filter_golgi(composited_golgi, golgi_contours)
+                self.load_beads()
             except Exception as e:
-                self.logger.error("[filtering golgi by peak check] Error in {}, skip this folder. Error is {}".format(
-                    self.folder_path[j], e))
-                raise Exception("[filtering golgi by peak check] Error in {}, skip this folder. Error is {}".format(
-                    self.folder_path[j], e))
-                continue
-
-            # Chromatic Shift and Check 3 criteria
+                self.logger.error("Error when load beads information: {}".format(e), exc_info=True)
+                raise Exception("Error when load beads information: {}".format(e))
+            else:
+                self.logger.info("1. Reading beads and training chromatic shift model sucessfully.")
+                self.append_text.emit("1. Reading beads and training chromatic shift model sucessfully.")
+            # 2. Read images
             try:
-                validGolgiIndex, valid_data_list, shifted_data_list = shift_and_criteria(
-                    golgi, golgi_centroid, self.lr_model[0], self.lr_model[1], self.lr_model[2], self.lr_model[3],
-                    bg_30SD[j])
+                self.beads_finished.emit(1)
+                golgi_images, bg_30SD = self.read_images()
             except Exception as e:
-                self.logger.error(
-                    "[Chromatic Shift and Check 3 criteria] Error in {}, skip this folder. Error is {}".format(
-                        self.folder_path[j], e))
-                raise Exception(
-                    "[Chromatic Shift and Check 3 criteria] Error in {}, skip this folder. Error is {}".format(
-                        self.folder_path[j], e))
-                continue
-            # self.valid_data_list = valid_data_list
-            # self.shifted_data_list = shifted_data_list
-
-            validShiftedCentroid, validShiftedLq, validIntensity = valid_data_list
-            shiftedCentroid, _, _ = shifted_data_list
-            totalLQ.extend(validShiftedLq)
-
-            valid_rect_coord = golgi_rect_coord[validGolgiIndex]
-            valid_golgi = golgi[validGolgiIndex]
-            if self.valid_lq is None:
-                self.valid_lq = validShiftedLq
+                self.logger.error("Error when load images: {}".format(e), exc_info=True)
+                raise Exception("Error when load images: {}".format(e))
             else:
-                self.valid_lq = np_append(self.valid_lq, validShiftedLq)
-
-            if self.valid_golgi is None:
-                self.valid_golgi = valid_golgi
+                self.append_text.emit("2. Reading images sucessfully.")
+                self.logger.info("2. Reading images sucessfully.")
+                ...
+            # 3. Preprocessing images.
+            try:
+                h_padding = int((self.new_size - self.img_height) / 2)
+                w_padding = int((self.new_size - self.img_width) / 2)
+                # self.new_size = max(self.img_width,self.img_height)
+                # padding to (self.new_size, self.new_size,3)
+                golgi_images_pad = np_pad(golgi_images, ((0, 0), (h_padding, h_padding), (w_padding, w_padding), (0, 0)),
+                                          mode="symmetric")
+                # patchify to 256*256*3
+                images, all_shape, single_shape = patch_image(golgi_images_pad, 256, 256, 3, 256)
+                self.logger.info("Patched image shape: {}".format(images.shape))
+                # normalization
+                images_norm = keras_norm(images, axis=1)
+            except Exception as e:
+                self.logger.error("Error when Load model and prediction: {}".format(e), exc_info=True)
+                raise Exception("Error when Load model and prediction: {}".format(e))
             else:
-                self.valid_golgi = np_append(self.valid_golgi, valid_golgi)
+                self.append_text.emit("3. Preprocessing images sucessfully.")
+                self.logger.info("3. Preprocessing images sucessfully.")
 
-            # # Create excel writer
-            # excel_writer, out_path = get_excel_writer(folder_path=self.folder_path[j][j] + "/result",
-            #                                           filename=self.imagesId[j] + ".xlsx")
-            #
-            # try:
-            #     # Write data into excel
-            #     write_data_excel(excel_writer, golgi_centroid, valid_data_list, shifted_data_list)
-            #     # excel_writer.save()
-            #     print("Create {}".format(out_path))
-            #     coord2roi(valid_rect_coord, self.folder_path[j] + "/result", "roi.zip")
-            #     golgi_plt2pdf(valid_golgi, self.folder_path[j] + "/result", "golgi_valid.pdf")
-            #     golgi_plt2pdf(golgi, self.folder_path[j] + "/result", "golgi_shifted.pdf")
-            #     lq_hist2pdf(validShiftedLq, self.folder_path[j] + "/result", "golgi_lq_histogram.pdf")
-            # except Exception as e:
-            #     print(e)
-            # finally:
-            #     excel_writer.close()
-            #     excel_writer.handles = None
+            # 4. Load model and prediction
+            try:
+                if self.model is None:
+                    self.model = load_model_func(self.model_path)
+                preds = self.model.predict(images_norm, verbose=1)
 
-        self.append_text.emit("5. Analysis predicted result sucessfully.")
-        self.logger.info("5. Analysis predicted result sucessfully.")
-        self.process_finished.emit(1)
+                pred_unpatched = unpatch_images(preds, all_shape, single_shape, 256, 256, self.img_height, self.img_width)
+                pred_unpadding = pred_unpatched[:, h_padding:self.new_size - h_padding, w_padding:self.new_size - w_padding,
+                                 :]
+            except Exception as e:
+                self.logger.error("Error when Load model and prediction: {}".format(e), exc_info=True)
+                raise Exception("Error when Load model and prediction: {}".format(e))
+            else:
+                self.append_text.emit("4. Load model and prediction sucessfully.")
+                self.logger.info("4. Load model and prediction sucessfully.")
+                ...
+            # 5.Analysis predicted result
+            totalLQ = []
+            for j, pred in enumerate(pred_unpadding):
+                composited_golgi = golgi_images[j]
+                # convert prediction to contours
+                golgi_contours = pred_2_contours(composited_golgi, pred, self.PRED_THRESHOLD, self.SELECTED_THRESHOLD)
+                # filtering golgi by peak check
+                try:
+                    golgi, golgi_rect_coord, golgi_centroid, invalid_golgi = filter_golgi(composited_golgi, golgi_contours)
+                except Exception as e:
+                    err_str = "[filtering golgi by peak check] Error in {}, skip this folder. Error is {}".format(
+                        self.folder_path[j], e)
+                    self.logger.error(err_str)
+                    raise Exception(err_str)
+
+                # Chromatic Shift and Check 3 criteria
+                try:
+                    validGolgiIndex, valid_data_list, shifted_data_list = shift_and_criteria(
+                        golgi, golgi_centroid, self.lr_model[0], self.lr_model[1], self.lr_model[2], self.lr_model[3],
+                        bg_30SD[j])
+                except Exception as e:
+                    self.logger.error(
+                        "[Chromatic Shift and Check 3 criteria] Error in {}, skip this folder. Error is {}".format(
+                            self.folder_path[j], e))
+                    raise Exception(
+                        "[Chromatic Shift and Check 3 criteria] Error in {}, skip this folder. Error is {}".format(
+                            self.folder_path[j], e))
+                    continue
+                # self.valid_data_list = valid_data_list
+                # self.shifted_data_list = shifted_data_list
+
+                validShiftedCentroid, validShiftedLq, validIntensity = valid_data_list
+                shiftedCentroid, _, _ = shifted_data_list
+                totalLQ.extend(validShiftedLq)
+
+                valid_rect_coord = golgi_rect_coord[validGolgiIndex]
+                valid_golgi = golgi[validGolgiIndex]
+                if self.valid_lq is None:
+                    self.valid_lq = validShiftedLq
+                else:
+                    self.valid_lq = np_append(self.valid_lq, validShiftedLq)
+
+                if self.valid_golgi is None:
+                    self.valid_golgi = valid_golgi
+                else:
+                    self.valid_golgi = np_append(self.valid_golgi, valid_golgi)
+
+                # # Create excel writer
+                # excel_writer, out_path = get_excel_writer(folder_path=self.folder_path[j][j] + "/result",
+                #                                           filename=self.imagesId[j] + ".xlsx")
+                #
+                # try:
+                #     # Write data into excel
+                #     write_data_excel(excel_writer, golgi_centroid, valid_data_list, shifted_data_list)
+                #     # excel_writer.save()
+                #     print("Create {}".format(out_path))
+                #     coord2roi(valid_rect_coord, self.folder_path[j] + "/result", "roi.zip")
+                #     golgi_plt2pdf(valid_golgi, self.folder_path[j] + "/result", "golgi_valid.pdf")
+                #     golgi_plt2pdf(golgi, self.folder_path[j] + "/result", "golgi_shifted.pdf")
+                #     lq_hist2pdf(validShiftedLq, self.folder_path[j] + "/result", "golgi_lq_histogram.pdf")
+                # except Exception as e:
+                #     print(e)
+                # finally:
+                #     excel_writer.close()
+                #     excel_writer.handles = None
+
+            self.append_text.emit("5. Analysis predicted result sucessfully.")
+            self.logger.info("5. Analysis predicted result sucessfully.")
+            self.process_finished.emit(1)
+        except Exception as e:
+            self.append_text.emit("{}".format(e))
 
     def load_beads(self):
         self.logger.info("Beads path: {}".format(self.beads_path))
