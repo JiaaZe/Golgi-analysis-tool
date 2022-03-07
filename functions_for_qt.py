@@ -240,7 +240,7 @@ class QtFunctions(QObject):
                 green_identifier = self.green_bgst_identifier
                 blue_identifier = self.blue_bgst_identifier
             else:
-                red_idtentifier = self.red_identifier
+                red_identifier = self.red_identifier
                 green_identifier = self.green_identifier
                 blue_identifier = self.blue_identifier
             for i, file_name in enumerate(files):
