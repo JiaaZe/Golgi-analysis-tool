@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1104</width>
-    <height>875</height>
+    <width>1007</width>
+    <height>903</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -53,8 +53,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1043</width>
-             <height>795</height>
+             <width>963</width>
+             <height>819</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_15">
@@ -2048,7 +2048,7 @@
                       </property>
                       <property name="text">
                        <string>1. Using existing BGST files and BG mean&amp;std excel file(If choose background data type as Excel cell reference).
-2. Using BG mean&amp;std excel file and BG-RoiSet.zip to generate BGST files(Only for Golgi images).
+2. Using raw Golgi images and BG-RoiSet.zip to generate BGST Golgi images.
 3. Using some algorithmns to generate BG mean&amp;std automatically.(alpha version)</string>
                       </property>
                      </widget>
@@ -2691,7 +2691,7 @@
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
-                <height>70</height>
+                <height>150</height>
                </size>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_10">
@@ -2706,7 +2706,7 @@
                  <property name="maximumSize">
                   <size>
                    <width>16777215</width>
-                   <height>50</height>
+                   <height>16777215</height>
                   </size>
                  </property>
                  <property name="html">
@@ -3050,7 +3050,7 @@ p, li { white-space: pre-wrap; }
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>967</width>
+                    <width>870</width>
                     <height>317</height>
                    </rect>
                   </property>
@@ -3148,8 +3148,8 @@ p, li { white-space: pre-wrap; }
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>1050</width>
-                    <height>268</height>
+                    <width>953</width>
+                    <height>296</height>
                    </rect>
                   </property>
                  </widget>
