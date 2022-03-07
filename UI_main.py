@@ -189,7 +189,7 @@ class MainWindow(QMainWindow):
 
         # TAB 2
         self.func = None
-        self.thread = QThread(self)
+        self.thread = None
         self.axes_dict = {}
         self.ui.start_btn.clicked.connect(self.start_process)
 
@@ -620,6 +620,9 @@ class MainWindow(QMainWindow):
 
         self.logger.info("start")
         try:
+            if self.thread is not None:
+                self.thread.terminate()
+            self.thread = QThread(self)
             self.logger.info('start doing stuff in: {}'.format(QThread.currentThread()))
             self.func = QtFunctions(self.saved_model_path, self.saved_model, self.logger)
             self.func.moveToThread(self.thread)
