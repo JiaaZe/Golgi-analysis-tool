@@ -1,4 +1,4 @@
-import time
+import re
 from sys import (exit as sys_exit, argv as sys_argv)
 from configparser import ConfigParser as configparser_ConfigParser
 from os.path import (exists as os_path_exists, split as os_path_split, isfile as os_path_isfile, isdir as os_path_isdir,
@@ -134,10 +134,11 @@ class MainWindow(QMainWindow):
         self.ui.param_bg_algorithmn.setVisible(False)
 
         # set validator on line edit
-        self.ui.param_pixel_threshold.setValidator(QRegularExpressionValidator(QRegularExpression("[0-9]+\.[0-9]+$")))
-        self.ui.param_golgi_threshold.setValidator(QRegularExpressionValidator(QRegularExpression("[0-9]+\.[0-9]+$")))
+        float_re = QRegularExpression("([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$")
+        self.ui.param_pixel_threshold.setValidator(QRegularExpressionValidator(float_re))
+        self.ui.param_golgi_threshold.setValidator(QRegularExpressionValidator(float_re))
         self.ui.param_contours_area_max.setValidator(QRegularExpressionValidator(QRegularExpression("[0-9]+$")))
-        self.ui.param_r2_r1_diff.setValidator(QRegularExpressionValidator(QRegularExpression("[0-9]+\.[0-9]+$")))
+        self.ui.param_r2_r1_diff.setValidator(QRegularExpressionValidator(float_re))
 
         self.ui.Parameter_group.setMaximumHeight(200)
         self.ui.bg_mode_combobox.currentIndexChanged.connect(self.show_bg_mode3)
@@ -518,6 +519,23 @@ class MainWindow(QMainWindow):
                 if bg_mode == "2" and not roi_flag:
                     err_msg += "Path {} has no BG-RoiSet.zip file".format(folder)
 
+        # Check 30*SD input
+        if self.ui.excel_cell_ref_ratio.isChecked():
+            pattern = "[A-Z][0-9]+$"
+            if re.match(pattern, self.ui.red_30sd.text()) is None:
+                err_msg += "Red 30*SD Excel reference is wrong. Please input right excel cell reference."
+            if re.match(pattern, self.ui.green_30sd.text()) is None:
+                err_msg += "Green 30*SD Excel reference is wrong. Please input right excel cell reference."
+            if re.match(pattern, self.ui.blue_30sd.text()) is None:
+                err_msg += "Blue 30*SD Excel reference is wrong. Please input right excel cell reference."
+        else:
+            pattern = "([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$"
+            if re.match(pattern, self.ui.red_30sd.text()) is None:
+                err_msg += "Red 30*SD data type is wrong. Please input right data type."
+            if re.match(pattern, self.ui.green_30sd.text()) is None:
+                err_msg += "Green 30*SD data type is wrong. Please input right data type."
+            if re.match(pattern, self.ui.blue_30sd.text()) is None:
+                err_msg += "Blue 30*SD data type is wrong. Please input right data type."
         if len(err_msg) > 0:
             n_enter = err_msg.count("\n")
             self.ui.next_btn.setDisabled(True)
