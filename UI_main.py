@@ -108,6 +108,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.logger = get_logger()
+        self.logger.info("\n==============================START==============================")
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.resize(1000, 820)
