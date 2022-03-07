@@ -227,23 +227,25 @@ class QtFunctions(QObject):
     def load_beads(self):
         self.logger.info("Beads path: {}".format(self.beads_path))
         if self.beads_mode == 1:
+            # csv file
             lr_x_blue, lr_y_blue, lr_x_green, lr_y_green, beads_df, pred_beads = train_beads(self.beads_path)
             self.lr_model = [lr_x_blue, lr_y_blue, lr_x_green, lr_y_green]
             self.beads_vector = [beads_df, pred_beads]
         elif self.beads_mode == 2:
+            # beads image
             beads_r, beads_g, beads_b = None, None, None
             files = os_listdir(self.beads_path)
-            if self.bg_mode == 3:
+            if self.bg_mode == 1:
+                red_identifier = self.red_bgst_identifier
+                green_identifier = self.green_bgst_identifier
+                blue_identifier = self.blue_bgst_identifier
+            else:
                 red_idtentifier = self.red_identifier
                 green_identifier = self.green_identifier
                 blue_identifier = self.blue_identifier
-            else:
-                red_idtentifier = self.red_bgst_identifier
-                green_identifier = self.green_bgst_identifier
-                blue_identifier = self.blue_bgst_identifier
             for i, file_name in enumerate(files):
                 file_path = os_path_join(self.beads_path, file_name)
-                if red_idtentifier.upper() in file_name.upper():
+                if red_identifier.upper() in file_name.upper():
                     beads_r = file_path
                     continue
                 if green_identifier.upper() in file_name.upper():
