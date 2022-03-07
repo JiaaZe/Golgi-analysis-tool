@@ -282,24 +282,6 @@ class QtFunctions(QObject):
             bg_info_path = None
             for file_name in files:
                 file_path = os_path_join(image_id, file_name)
-                if self.red_identifier.upper() in file_name.upper() \
-                        and not self.red_bgst_identifier.upper() in file_name.upper() \
-                        and file_name.upper().endswith(".TIF"):
-                    red_tif = read_tif(file_path, self.img_height, self.img_width)
-                    r_file_path = file_path
-                    continue
-                if self.green_identifier.upper() in file_name.upper() \
-                        and not self.green_bgst_identifier.upper() in file_name.upper() \
-                        and file_name.upper().endswith(".TIF"):
-                    green_tif = read_tif(file_path, self.img_height, self.img_width)
-                    g_file_path = file_path
-                    continue
-                if self.blue_identifier.upper() in file_name.upper() \
-                        and not self.blue_bgst_identifier.upper() in file_name.upper() \
-                        and file_name.upper().endswith(".TIF"):
-                    blue_tif = read_tif(file_path, self.img_height, self.img_width)
-                    b_file_path = file_path
-                    continue
                 if self.bg_mode == 1:
                     # Read BGST tif files and bg excel file
                     if file_name.endswith("xlsx"):
@@ -314,7 +296,23 @@ class QtFunctions(QObject):
                             and file_name.upper().endswith(".TIF"):
                         blue_bgst_tif = read_tif(file_path, self.img_height, self.img_width)
                 elif self.bg_mode == 2:
-                    # Read original tif files and BG-RoiSet.zip
+                    # Read original tif files
+                    if self.red_identifier.upper() in file_name.upper() \
+                            and file_name.upper().endswith(".TIF"):
+                        red_tif = read_tif(file_path, self.img_height, self.img_width)
+                        r_file_path = file_path
+                        continue
+                    if self.green_identifier.upper() in file_name.upper() \
+                            and file_name.upper().endswith(".TIF"):
+                        green_tif = read_tif(file_path, self.img_height, self.img_width)
+                        g_file_path = file_path
+                        continue
+                    if self.blue_identifier.upper() in file_name.upper() \
+                            and file_name.upper().endswith(".TIF"):
+                        blue_tif = read_tif(file_path, self.img_height, self.img_width)
+                        b_file_path = file_path
+                        continue
+                    # Read  BG-RoiSet.zip
                     if self.bg_roi_name.upper() in file_name.upper():
                         bg_roi_path = file_path
                 elif self.bg_mode == 3:
