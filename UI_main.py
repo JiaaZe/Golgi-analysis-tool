@@ -375,21 +375,6 @@ class MainWindow(QMainWindow):
         else:
             err_msg += "BG MODE is wrong.\n"
 
-        if len(self.ui.red_identifier.text()) > 0:
-            self.cfg['image_information']['red_identifier'] = self.ui.red_identifier.text()
-        else:
-            err_msg += "red_identifier is empty.\n"
-
-        if len(self.ui.green_identifier.text()) > 0:
-            self.cfg['image_information']['green_identifier'] = self.ui.green_identifier.text()
-        else:
-            err_msg += "green_identifier is empty.\n"
-
-        if len(self.ui.blue_identifier.text()) > 0:
-            self.cfg['image_information']['blue_identifier'] = self.ui.blue_identifier.text()
-        else:
-            err_msg += "blue_identifier is empty.\n"
-
         if len(self.ui.image_height.text()) > 0:
             self.cfg['image_information']['image_height'] = self.ui.image_height.text()
         else:
@@ -400,21 +385,59 @@ class MainWindow(QMainWindow):
         else:
             err_msg += "image_width is empty.\n"
 
-        if bg_mode != "3":
+        # when BG_MODE == 1, need bgst tif files.
+        if bg_mode == "1":
+            bgst_identifier = ["", "", ""]
             if len(self.ui.red_bgst_identifier.text()) > 0:
                 self.cfg['image_information']['red_bgst_identifier'] = self.ui.red_bgst_identifier.text()
+                bgst_identifier[0] = self.ui.red_bgst_identifier.text().upper()
             else:
                 err_msg += "red_bgst_identifier is empty.\n"
 
             if len(self.ui.green_bgst_identifier.text()) > 0:
                 self.cfg['image_information']['green_bgst_identifier'] = self.ui.green_bgst_identifier.text()
+                bgst_identifier[1] = self.ui.green_bgst_identifier.text().upper()
             else:
                 err_msg += "green_bgst_identifier is empty.\n"
 
             if len(self.ui.blue_bgst_identifier.text()) > 0:
                 self.cfg['image_information']['blue_bgst_identifier'] = self.ui.blue_bgst_identifier.text()
+                bgst_identifier[2] = self.ui.blue_bgst_identifier.text().upper()
             else:
                 err_msg += "blue_bgst_identifier is empty.\n"
+
+            if len(self.ui.red_30sd.text()) > 0:
+                self.cfg['bg_information']['red_30sd'] = self.ui.red_30sd.text()
+            else:
+                err_msg += "green_30sd is empty.\n"
+            if len(self.ui.green_30sd.text()) > 0:
+                self.cfg['bg_information']['green_30sd'] = self.ui.green_30sd.text()
+            else:
+                err_msg += "green_30sd is empty.\n"
+            if len(self.ui.blue_30sd.text()) > 0:
+                self.cfg['bg_information']['blue_30sd'] = self.ui.blue_30sd.text()
+            else:
+                err_msg += "blue_30sd is empty.\n"
+        else:
+            normal_identifier = ["", "", ""]
+            if len(self.ui.red_identifier.text()) > 0:
+                self.cfg['image_information']['red_identifier'] = self.ui.red_identifier.text()
+                normal_identifier[0] = self.ui.red_identifier.text().upper()
+            else:
+                err_msg += "red_identifier is empty.\n"
+
+            if len(self.ui.green_identifier.text()) > 0:
+                self.cfg['image_information']['green_identifier'] = self.ui.green_identifier.text()
+                normal_identifier[1] = self.ui.green_identifier.text().upper()
+            else:
+                err_msg += "green_identifier is empty.\n"
+
+            if len(self.ui.blue_identifier.text()) > 0:
+                self.cfg['image_information']['blue_identifier'] = self.ui.blue_identifier.text()
+                normal_identifier[2] = self.ui.blue_identifier.text().upper()
+            else:
+                err_msg += "blue_identifier is empty.\n"
+
         if bg_mode == "3":
             if len(r2_r1_diff) > 0:
                 self.cfg['parameters']['R2_R1_DIFF'] = r2_r1_diff
@@ -448,19 +471,6 @@ class MainWindow(QMainWindow):
         #     self.cfg['bg_information']['blue_mean5sd'] = self.ui.blue_mean5sd.text()
         # else:
         #     err_msg += "blue_mean5sd is empty.\n"
-
-        if len(self.ui.red_30sd.text()) > 0:
-            self.cfg['bg_information']['red_30sd'] = self.ui.red_30sd.text()
-        else:
-            err_msg += "green_30sd is empty.\n"
-        if len(self.ui.green_30sd.text()) > 0:
-            self.cfg['bg_information']['green_30sd'] = self.ui.green_30sd.text()
-        else:
-            err_msg += "green_30sd is empty.\n"
-        if len(self.ui.blue_30sd.text()) > 0:
-            self.cfg['bg_information']['blue_30sd'] = self.ui.blue_30sd.text()
-        else:
-            err_msg += "blue_30sd is empty.\n"
         if self.ui.excel_cell_ref_ratio.isChecked():
             self.cfg['bg_information']['excel_cell_ref'] = "1"
         else:
