@@ -110,7 +110,7 @@ class MainWindow(QMainWindow):
         self.logger = get_logger()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.resize(1141, 870)
+        self.resize(1000, 820)
 
         self.cfg = configparser_ConfigParser()
         if os_path_exists(config_file):
