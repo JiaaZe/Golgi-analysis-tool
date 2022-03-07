@@ -1,6 +1,7 @@
 from numpy import (uint8 as np_uint8, ones as np_ones, array as np_array, zeros as np_zeros, uint16 as np_uint16,
                    sum as np_sum, mean as np_mean, round as np_round, where as np_where, sqrt as np_sqrt,
-                   dot as np_dot, histogram as np_histogram, linalg as np_linalg, cross as np_cross)
+                   dot as np_dot, histogram as np_histogram, linalg as np_linalg, cross as np_cross,
+                   delete as np_delete)
 from pandas import DataFrame as pd_DataFrame
 from queue import Queue as queue_Queue
 from cv2 import (cvtColor as cv2_cvtColor, COLOR_GRAY2RGB as cv2_COLOR_GRAY2RGB, threshold as cv2_threshold,
@@ -117,7 +118,7 @@ def filter_golgi(composited, golgiContours):
     invalidGolgi = []
 
     oriGolgi = composited.copy()
-
+    selected_golgi_same_1st_shape = True
     # Find predicted golgi's centroids
     for i in range(len(golgiContours)):
         golgi_contours_np = np_array(golgiContours[i])
@@ -141,12 +142,20 @@ def filter_golgi(composited, golgiContours):
             b_centroid = np_round(ndi_center_of_mass(b), 5) + [x - 1, y - 1] + [0.5, 0.5]
             validGolgi_centroid.append(np_array([r_centroid, g_centroid, b_centroid]))
             validGolgi_rect_coord.append((x, y, w, h))
+            if selected_golgi_same_1st_shape and len(validGolgi) > 0 and selected_golgi.shape[0] != \
+                    validGolgi[-1].shape[0]:
+                selected_golgi_same_1st_shape = False
             validGolgi.append(selected_golgi)
         else:
             invalidGolgi.append(selected_golgi)
     validGolgi_centroid = np_array(validGolgi_centroid)
     validGolgi_rect_coord = np_array(validGolgi_rect_coord)
-    validGolgi = np_array(validGolgi, dtype=object)
+    if selected_golgi_same_1st_shape and len(validGolgi) > 1:
+        validGolgi.append(np_zeros((1, 1)))
+        validGolgi = np_array(validGolgi, dtype=object)
+        validGolgi = np_delete(validGolgi, [-1])
+    else:
+        validGolgi = np_array(validGolgi, dtype=object)
     return validGolgi, validGolgi_rect_coord, validGolgi_centroid, invalidGolgi
 
 
