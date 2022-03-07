@@ -135,11 +135,14 @@ def read_bg_info(excel_path, mead5sd_cell, _30sd_cell, sheet_name=1):
     try:
         df = pd_read_excel(excel_path, sheet_name=sheet_name)
     except Exception as e:
-        raise e
+        raise Exception("Error when read excel file: {}".format(e))
     # mean5sd_coords = [cell_to_coords(x) for x in mead5sd_cell]
-    _30std_coords = [cell_to_coords(x) for x in _30sd_cell]
+    try:
+        _30std_coords = [cell_to_coords(x) for x in _30sd_cell]
     # mean_5_std = np_array([df.iloc[coord[0]][coord[1]] for coord in mean5sd_coords]).astype(np_float)
-    _30std = np_array([df.iloc[coord[0]][coord[1]] for coord in _30std_coords]).astype(np_float)
+        _30std = np_array([df.iloc[coord[0]][coord[1]] for coord in _30std_coords]).astype(np_float)
+    except Exception as e:
+        raise Exception("Error when read excel file: {}. Please check excel reference".format(e))
     # mean_5_std = np_array(df.iloc[3][[3, 8, 13]]).astype(np_float)
     # _30std = np_array(df.iloc[4][[2, 7, 12]]).astype(np_float)
     # return mean_5_std, _30std
