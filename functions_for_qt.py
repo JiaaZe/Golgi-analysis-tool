@@ -122,7 +122,8 @@ class QtFunctions(QObject):
                 w_padding = int((self.new_size - self.img_width) / 2)
                 # self.new_size = max(self.img_width,self.img_height)
                 # padding to (self.new_size, self.new_size,3)
-                golgi_images_pad = np_pad(golgi_images, ((0, 0), (h_padding, h_padding), (w_padding, w_padding), (0, 0)),
+                golgi_images_pad = np_pad(golgi_images,
+                                          ((0, 0), (h_padding, h_padding), (w_padding, w_padding), (0, 0)),
                                           mode="symmetric")
                 # patchify to 256*256*3
                 images, all_shape, single_shape = patch_image(golgi_images_pad, 256, 256, 3, 256)
@@ -160,11 +161,12 @@ class QtFunctions(QObject):
                 golgi_contours = pred_2_contours(composited_golgi, pred, self.PRED_THRESHOLD, self.SELECTED_THRESHOLD)
                 # filtering golgi by peak check
                 try:
-                    golgi, golgi_rect_coord, golgi_centroid, invalid_golgi = filter_golgi(composited_golgi, golgi_contours)
+                    golgi, golgi_rect_coord, golgi_centroid, invalid_golgi = filter_golgi(composited_golgi,
+                                                                                          golgi_contours)
                 except Exception as e:
                     err_str = "[filtering golgi by peak check] Error in {}, skip this folder. Error is {}".format(
                         self.folder_path[j], e)
-                    self.logger.error(err_str)
+                    self.logger.error(err_str, exc_info=True)
                     raise Exception(err_str)
 
                 # Chromatic Shift and Check 3 criteria
@@ -175,7 +177,7 @@ class QtFunctions(QObject):
                 except Exception as e:
                     self.logger.error(
                         "[Chromatic Shift and Check 3 criteria] Error in {}, skip this folder. Error is {}".format(
-                            self.folder_path[j], e))
+                            self.folder_path[j], e), exc_info=True)
                     raise Exception(
                         "[Chromatic Shift and Check 3 criteria] Error in {}, skip this folder. Error is {}".format(
                             self.folder_path[j], e))
