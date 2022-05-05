@@ -652,6 +652,10 @@ class MainWindow(QMainWindow):
             self.lq_dialog.show()
 
     def save_golgi_result(self):
+        save_path, save_type = QFileDialog.getSaveFileName(self, "Save File", "./Golgi Gallery & LQ Histogram.pdf",
+                                                           'pdf(*.pdf)')
+        if len(save_path) == 0:
+            return
         valid_golgi, valid_lq = self.func.get_golgi_lq()
         if self.ui.pick_btn.isChecked():
             # pick_select
@@ -661,8 +665,6 @@ class MainWindow(QMainWindow):
             # drop_select
             selected_golgi = np_delete(valid_golgi, self.selected_list)
             selected_lq = np_delete(valid_lq, self.selected_list)
-        save_path, save_type = QFileDialog.getSaveFileName(self, "Save File", "./Golgi Gallery & LQ Histogram.pdf",
-                                                           'pdf(*.pdf)')
         folder, file = os_path_split(save_path)
         golgi_lq_2pdf(selected_golgi, selected_lq, folder, file)
 
